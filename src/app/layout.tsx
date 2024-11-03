@@ -6,6 +6,7 @@ import "./globals.css";
 import { H1, H3 } from "./components/custom-tags";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
 import Header from "./components/header";
 
 const geistSans = localFont({
@@ -36,13 +37,20 @@ export default function Layout({
       >
         <ClerkProvider>
           <SignedIn>
-            <SidebarProvider>
-              <AppSidebar />
-              <main className="flex-grow flex flex-col">
-                <Header />
-                {children}
-              </main>
-            </SidebarProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <SidebarProvider>
+                <AppSidebar />
+                <main className="flex-grow flex flex-col">
+                  <Header />
+                  {children}
+                </main>
+              </SidebarProvider>
+            </ThemeProvider>
           </SignedIn>
           <SignedOut>
             <div className="flex flex-col md:flex-row items-center justify-around gap-8 h-screen overflow-y-auto p-8">
