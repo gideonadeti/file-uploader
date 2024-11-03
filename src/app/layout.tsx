@@ -4,6 +4,9 @@ import localFont from "next/font/local";
 
 import "./globals.css";
 import { H1, H3 } from "./components/custom-tags";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import Header from "./components/header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +35,15 @@ export default function Layout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ClerkProvider>
-          <SignedIn>{children}</SignedIn>
+          <SignedIn>
+            <SidebarProvider>
+              <AppSidebar />
+              <main className="flex-grow flex flex-col">
+                <Header />
+                {children}
+              </main>
+            </SidebarProvider>
+          </SignedIn>
           <SignedOut>
             <div className="flex flex-col md:flex-row items-center justify-around gap-8 h-screen overflow-y-auto p-8">
               <div className="flex flex-col text-center lg:text-left">
