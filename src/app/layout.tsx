@@ -3,11 +3,12 @@ import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
 import localFont from "next/font/local";
 
 import "./globals.css";
+import Header from "./components/header";
+import QCProvider from "@/components/query-client-provider";
 import { H1, H3 } from "./components/custom-tags";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "./components/header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -47,7 +48,7 @@ export default function Layout({
                 <AppSidebar />
                 <main className="flex-grow flex flex-col">
                   <Header />
-                  {children}
+                  <QCProvider>{children}</QCProvider>
                 </main>
               </SidebarProvider>
             </ThemeProvider>
