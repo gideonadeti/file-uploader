@@ -46,14 +46,14 @@ export default function Layout({
               disableTransitionOnChange
             >
               <SidebarProvider>
-                <AppSidebar />
-                <main className="flex-grow flex flex-col">
-                  <Header />
-                  <QCProvider>
+                <QCProvider>
+                  <AppSidebar />
+                  <main className="flex-grow flex flex-col">
+                    <Header />
                     {children}
                     <Toaster />
-                  </QCProvider>
-                </main>
+                  </main>
+                </QCProvider>
               </SidebarProvider>
             </ThemeProvider>
           </SignedIn>
