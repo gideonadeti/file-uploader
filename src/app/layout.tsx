@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider, SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/toaster";
 import localFont from "next/font/local";
 
 import "./globals.css";
@@ -48,7 +49,10 @@ export default function Layout({
                 <AppSidebar />
                 <main className="flex-grow flex flex-col">
                   <Header />
-                  <QCProvider>{children}</QCProvider>
+                  <QCProvider>
+                    {children}
+                    <Toaster />
+                  </QCProvider>
                 </main>
               </SidebarProvider>
             </ThemeProvider>

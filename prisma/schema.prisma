@@ -21,6 +21,7 @@ model Folder {
 
 model File {
   id        String   @id @default(uuid())
+  userId    String
   name      String
   url       String
   folderId  String
