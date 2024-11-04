@@ -31,3 +31,18 @@ export async function readFiles(userId: string) {
     throw error;
   }
 }
+
+export async function createFolder(name: string, userId: string) {
+  try {
+    const response = await axios.post("/api/folders", {
+      name,
+      userId,
+    });
+
+    return response.data.message;
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+}

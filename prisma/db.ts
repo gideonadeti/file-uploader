@@ -57,3 +57,19 @@ export async function readFiles(userId: string) {
     throw error;
   }
 }
+
+export async function readFolder(name: string) {
+  try {
+    const folder = await prismaClient.folder.findFirst({
+      where: {
+        name,
+      },
+    });
+
+    return folder;
+  } catch (error) {
+    console.error("Error reading folder:", error);
+
+    throw error;
+  }
+}
