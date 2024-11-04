@@ -5,13 +5,20 @@ import { useUser } from "@clerk/nextjs";
 import { useToast } from "@/hooks/use-toast";
 import { Folder, File } from "@prisma/client";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { readFolders, readFiles } from "./query-functions";
+import { FileOrFolder } from "./types";
+import { DataTable } from "./components/data-table/table";
+import { columns } from "./components/data-table/columns";
+import { Spinner } from "@/components/spinner";
 
 export default function Page() {
   const { user } = useUser();
   const { toast } = useToast();
+
+  const [items, setItems] = useState<FileOrFolder[]>([]);
+
   const {
     data: folders,
     status: foldersStatus,
@@ -40,11 +47,27 @@ export default function Page() {
         description: errorMessage,
         variant: "destructive",
       });
-    } else {
-      if (foldersStatus === "success" && filesStatus === "success") {
-        console.log("Folders:", folders);
-        console.log("Files:", files);
-      }
+    } else if (foldersStatus === "success" && filesStatus === "success") {
+      const folderItems = folders
+        .filter((folder) => folder.name !== "Root" && folder.parentId === null) // Exclude root folder
+        .map((folder) => ({
+          id: folder.id,
+          name: folder.name,
+          type: "folder",
+          createdAt: folder.createdAt,
+          updatedAt: folder.updatedAt,
+        }));
+
+      const fileItems = files.map((file) => ({
+        id: file.id,
+        name: file.name,
+        type: "file",
+        size: file.size,
+        createdAt: file.createdAt,
+        updatedAt: file.updatedAt,
+      }));
+
+      setItems([...folderItems, ...fileItems]);
     }
   }, [
     foldersError,
@@ -56,5 +79,13 @@ export default function Page() {
     toast,
   ]);
 
-  return <></>;
+  return (
+    <div className="flex-grow px-8 py-4">
+      {foldersStatus === "pending" || filesStatus === "pending" ? (
+        <Spinner className="mx-auto" />
+      ) : (
+        <DataTable columns={columns} data={items} />
+      )}
+    </div>
+  );
 }
