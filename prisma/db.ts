@@ -73,3 +73,22 @@ export async function readFolder(name: string) {
     throw error;
   }
 }
+
+export async function updateFolder(id: string, name: string) {
+  try {
+    const folder = await prismaClient.folder.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return folder;
+  } catch (error) {
+    console.error("Error updating folder:", error);
+
+    throw error;
+  }
+}
