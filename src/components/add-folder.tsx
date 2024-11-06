@@ -23,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { updateFolder } from "@/app/query-functions";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -31,37 +32,58 @@ const formSchema = z.object({
 export default function AddFolder({
   open,
   onOpenChange,
+  defaultValue,
+  folderUpdateId,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  defaultValue: string;
+  folderUpdateId: string;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Folder</DialogTitle>
+          <DialogTitle>
+            {folderUpdateId ? "Update Folder" : "Create Folder"}
+          </DialogTitle>
         </DialogHeader>
-        <AddFolderForm />
+        <AddFolderForm
+          defaultValue={defaultValue}
+          folderUpdateId={folderUpdateId}
+        />
       </DialogContent>
     </Dialog>
   );
 }
 
-function AddFolderForm() {
+function AddFolderForm({
+  defaultValue,
+  folderUpdateId,
+}: {
+  defaultValue: string;
+  folderUpdateId: string;
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "" },
+    defaultValues: { name: defaultValue || "" },
   });
   const queryClient = useQueryClient();
   const { user } = useUser();
   const { toast } = useToast();
   const { mutate, status } = useMutation<string, AxiosError>({
-    mutationFn: () => createFolder(form.getValues("name"), user!.id),
+    mutationFn: () => {
+      if (folderUpdateId) {
+        return updateFolder(folderUpdateId, form.getValues("name"));
+      } else {
+        return createFolder(form.getValues("name"), user!.id);
+      }
+    },
     onSuccess: (message) => {
       queryClient.invalidateQueries({
         queryKey: ["folders"],
       });
-      form.reset();
+      form.reset({ name: "" });
 
       toast({
         description: message,
@@ -101,11 +123,7 @@ function AddFolderForm() {
         />
 
         <Button type="submit" disabled={status === "pending"}>
-          {status === "pending"
-            ? "Submitting"
-            : status === "success"
-            ? "Update"
-            : "Submit"}
+          {status === "pending" ? "Submitting" : "Submit"}
         </Button>
       </form>
     </Form>

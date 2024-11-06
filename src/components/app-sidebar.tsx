@@ -19,7 +19,12 @@ export function AppSidebar() {
           Add Folder
         </Button>
       </SidebarHeader>
-      <AddFolder open={openFolder} onOpenChange={setOpenFolder} />
+      <AddFolder
+        open={openFolder}
+        onOpenChange={setOpenFolder}
+        defaultValue=""
+        folderUpdateId=""
+      />
     </Sidebar>
   );
 }

@@ -46,3 +46,17 @@ export async function createFolder(name: string, userId: string) {
     throw error;
   }
 }
+
+export async function updateFolder(id: string, name: string) {
+  try {
+    const response = await axios.patch(`/api/folders/${id}`, {
+      name,
+    });
+
+    return response.data.message;
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+}
