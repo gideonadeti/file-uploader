@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { readFolder, updateFolder } from "../../../../../prisma/db";
+import {
+  readFolder,
+  updateFolder,
+  deleteFolder,
+} from "../../../../../prisma/db";
 
 export async function PATCH(
   req: NextRequest,
@@ -30,6 +34,29 @@ export async function PATCH(
 
     return NextResponse.json(
       { error: "Something went wrong while updating folder." },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ folderId: string }> }
+) {
+  const { folderId } = await params;
+
+  try {
+    await deleteFolder(folderId);
+
+    return NextResponse.json(
+      { message: "Folder deleted successfully." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting folder:", error);
+
+    return NextResponse.json(
+      { error: "Something went wrong while deleting folder." },
       { status: 500 }
     );
   }

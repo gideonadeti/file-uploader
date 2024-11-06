@@ -60,3 +60,15 @@ export async function updateFolder(id: string, name: string) {
     throw error;
   }
 }
+
+export async function deleteFolder(id: string) {
+  try {
+    const response = await axios.delete(`/api/folders/${id}`);
+
+    return response.data.message;
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+}

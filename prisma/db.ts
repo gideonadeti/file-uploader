@@ -92,3 +92,19 @@ export async function updateFolder(id: string, name: string) {
     throw error;
   }
 }
+
+export async function deleteFolder(id: string) {
+  try {
+    const folder = await prismaClient.folder.delete({
+      where: {
+        id,
+      },
+    });
+
+    return folder;
+  } catch (error) {
+    console.error("Error deleting folder:", error);
+
+    throw error;
+  }
+}

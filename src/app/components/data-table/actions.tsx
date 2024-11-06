@@ -7,6 +7,7 @@ import { Folder } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import AddFolder from "@/components/add-folder";
+import DeleteFolder from "@/components/delete-folder";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,6 +24,7 @@ interface ActionsProps<TData> {
 export default function Actions<TData>({ row }: ActionsProps<TData>) {
   const folder = row.original as Folder;
   const [folderUpdateOpen, setFolderUpdateOpen] = useState(false);
+  const [folderDeleteOpen, setFolderDeleteOpen] = useState(false);
 
   return (
     <DropdownMenu>
@@ -41,7 +43,12 @@ export default function Actions<TData>({ row }: ActionsProps<TData>) {
         <DropdownMenuItem>Download</DropdownMenuItem>
         <DropdownMenuItem>Share</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
+        <DropdownMenuItem
+          className="text-red-600"
+          onClick={() => setFolderDeleteOpen(true)}
+        >
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
 
       <AddFolder
@@ -49,6 +56,11 @@ export default function Actions<TData>({ row }: ActionsProps<TData>) {
         onOpenChange={setFolderUpdateOpen}
         defaultValue={folder.name}
         folderUpdateId={folder.id}
+      />
+      <DeleteFolder
+        open={folderDeleteOpen}
+        onOpenChange={setFolderDeleteOpen}
+        folderDeleteId={folder.id}
       />
     </DropdownMenu>
   );
