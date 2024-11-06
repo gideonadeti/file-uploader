@@ -6,3 +6,11 @@ export interface FileOrFolder {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface File {
+  userId: string;
+  folderId: string;
+  name: string;
+  size: number;
+  url: string;
+}

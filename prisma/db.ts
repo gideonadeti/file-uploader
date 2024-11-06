@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
+import { File } from "@/app/types";
+
 const prismaClient = new PrismaClient();
 
 export async function readFolders(userId: string) {
@@ -104,6 +106,27 @@ export async function deleteFolder(id: string) {
     return folder;
   } catch (error) {
     console.error("Error deleting folder:", error);
+
+    throw error;
+  }
+}
+export async function createFiles(
+  userId: string,
+  folderId: string,
+  files: File[]
+) {
+  try {
+    const newFiles = await prismaClient.file.createMany({
+      data: files.map((file) => ({
+        ...file,
+        userId,
+        folderId,
+      })),
+    });
+
+    return newFiles;
+  } catch (error) {
+    console.error("Error creating files:", error);
 
     throw error;
   }

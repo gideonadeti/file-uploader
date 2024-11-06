@@ -1,4 +1,5 @@
 import axios from "axios";
+import { File } from "./types";
 
 export async function readFolders(userId: string) {
   try {
@@ -64,6 +65,26 @@ export async function updateFolder(id: string, name: string) {
 export async function deleteFolder(id: string) {
   try {
     const response = await axios.delete(`/api/folders/${id}`);
+
+    return response.data.message;
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+}
+
+export async function createFiles(
+  userId: string,
+  folderId: string,
+  files: File[]
+) {
+  try {
+    const response = await axios.post("/api/files", {
+      userId,
+      folderId,
+      files,
+    });
 
     return response.data.message;
   } catch (error) {
