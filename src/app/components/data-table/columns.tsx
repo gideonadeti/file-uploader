@@ -109,8 +109,9 @@ export const columns: ColumnDef<FileOrFolder>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem>Edit</DropdownMenuItem>
             <DropdownMenuItem>Download</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
             <DropdownMenuItem>Share</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
